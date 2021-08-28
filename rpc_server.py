@@ -22,7 +22,7 @@ def disable_motors():
 
 
 # set up the server
-server = SimpleXMLRPCServer(("localhost", 8000))
+server = SimpleXMLRPCServer(("192.168.0.10", 8000))
 # register our functions
 server.register_function(hello)
 server.register_function(add)

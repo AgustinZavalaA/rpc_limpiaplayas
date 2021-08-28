@@ -5,7 +5,7 @@ import pygame
 def main():
     pygame.init()
 
-    s = xmlrpc.client.ServerProxy("http://localhost:8000")
+    s = xmlrpc.client.ServerProxy("http://192.168.0.10:8000")
     print(s.hello())
 
     # Loop until the user clicks the close button.
@@ -21,8 +21,10 @@ def main():
             if event.type == pygame.JOYBUTTONUP:
                 print("Joystick button released.")
 
-        while pygame.joystick.get_count() < 1:
+        if pygame.joystick.get_count() < 1:
             print("no hay control")
+            while pygame.joystick.get_count() < 1:
+                pass
 
         joystick = pygame.joystick.Joystick(0)
         joystick.init()
