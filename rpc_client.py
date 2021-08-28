@@ -2,6 +2,20 @@ import xmlrpc.client
 import pygame
 
 
+def print_info(joystick):
+    print(f"dir = {joystick.get_axis(0):.2f}")
+    print(f"ret = {joystick.get_axis(2):.2f}")
+    print(f"ava = {joystick.get_axis(5):.2f}")
+
+    print(f"freno = {joystick.get_button(0):.2f}")
+    print(f"garra = {joystick.get_button(1):.2f}")
+    print(f"pinza = {joystick.get_button(2):.2f}")
+    print(f"Horn  = {joystick.get_button(3):.2f}")
+    print(f"giroI = {joystick.get_button(4):.2f}")
+    print(f"giroD = {joystick.get_button(5):.2f}")
+    print(f"exit  = {joystick.get_button(8):.2f}")
+
+
 def main():
     pygame.init()
 
@@ -29,16 +43,9 @@ def main():
         joystick = pygame.joystick.Joystick(0)
         joystick.init()
 
-        print(f"dir = {joystick.get_axis(0):.2f}")
-        print(f"ret = {joystick.get_axis(2):.2f}")
-        print(f"ava = {joystick.get_axis(5):.2f}")
+        print_info(joystick)
 
-        print(f"freno = {joystick.get_button(0):.2f}")
-        print(f"garra = {joystick.get_button(1):.2f}")
-        print(f"pinza = {joystick.get_button(2):.2f}")
-        print(f"Horn  = {joystick.get_button(3):.2f}")
-        print(f"giroI = {joystick.get_button(4):.2f}")
-        print(f"giroD = {joystick.get_button(5):.2f}")
+        s.move(True, 100, True)
 
         if joystick.get_button(8):
             done = True
