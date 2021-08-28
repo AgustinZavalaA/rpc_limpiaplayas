@@ -27,6 +27,7 @@ def main():
 
     # Initialize the joysticks
     pygame.joystick.init()
+    speed = 0
 
     while not done:
         for event in pygame.event.get():
@@ -45,12 +46,31 @@ def main():
 
         print_info(joystick)
 
-        s.move_motors(True, 100, True)
-        s.disable()
+        # if joystick.get_axis(5) > -0.9:
+        f = lambda x: 45 * x + 45
+        speed = f(joystick.get_axis(5)) - f(joystick.get_axis(2))
+        print(speed)
+        # else:
+
+        if joystick.get_button(0):
+            s.stop()
+        elif joystick.get_button(4):
+            s.move_motors(True, 90, True)
+            s.move_motors(False, 90, False)
+        elif joystick.get_button(5):
+            s.move_motors(True, 90, False)
+            s.move_motors(False, 90, True)
+        elif speed > 0:
+            s.move_motors(True, speed, True)
+            s.move_motors(False, speed, True)
+        else:
+            s.move_motors(True, -speed, False)
+            s.move_motors(False, -speed, False)
 
         if joystick.get_button(8):
-            s.disable()
+            s.stop()
             done = True
+            joystick.quit()
 
 
 if __name__ == "__main__":
