@@ -46,8 +46,10 @@ def main():
         print_info(joystick)
 
         s.move(True, 100, True)
+        s.disable()
 
         if joystick.get_button(8):
+            s.disable()
             done = True
 
 

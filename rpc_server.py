@@ -11,7 +11,7 @@ def add(x, y):
 
 
 # set up the server
-server = SimpleXMLRPCServer(("192.168.0.10", 8000))
+server = SimpleXMLRPCServer(("192.168.0.10", 8000), allow_none=True)
 # register our functions
 server.register_function(hello)
 server.register_function(add)
