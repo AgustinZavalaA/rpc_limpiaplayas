@@ -36,4 +36,7 @@ server.register_function(add)
 # server.register_function(move_motors)
 server.register_instance(DriverMotors())
 # Run the server's main loop
-server.serve_forever()
+try:
+    server.serve_forever()
+except KeyboardInterrupt:
+    print("Exiting")
