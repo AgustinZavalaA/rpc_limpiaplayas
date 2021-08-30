@@ -12,8 +12,17 @@ def add(x, y):
     return x + y
 
 
-class DriverMotors(Motors):
-    Motors.__init__()
+class DriverMotors:
+    motors = Motors()
+
+    def move(self, motor: bool, speed: int, direction: bool) -> None:
+        self.motors.move(motor, speed, direction)
+
+    def disable(self) -> None:
+        self.motors.disable()
+
+    def stop(self) -> None:
+        self.motors.stop()
 
 
 # set up the server
