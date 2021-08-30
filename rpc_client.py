@@ -22,6 +22,8 @@ def print_info(joystick) -> None:
 
 
 def main() -> None:
+    MAX_LINEAR_SPEED = 90
+    MAX_CURVE_SPEED = 40
     pygame.init()
 
     # Init the server with the raspberry, also it checks the connection with a hello world
@@ -54,15 +56,21 @@ def main() -> None:
 
         print_info(joystick)
 
-        f = lambda x: 35 * x + 35
+        f = lambda x: MAX_LINEAR_SPEED / 2 * x + MAX_LINEAR_SPEED / 2
         speed = f(joystick.get_axis(5)) - f(joystick.get_axis(2))
-        # print(speed)
 
-        y = lambda x: 30 * x
+        direction = speed >= 0
+        speed = abs(speed)
+
+        y = lambda x: MAX_CURVE_SPEED * x
         mod = y(joystick.get_axis(0))
-        # print(mod)
-        print(f"i:{speed-mod:2f} d:{speed+mod:2f}")
+
         speed_left, speed_right = speed - mod, speed + mod
+        # Check validity in lower limit
+        speed_left, speed_right = speed_left if speed_left > 0 else 0, speed_right if speed_right > 0 else 0
+        # Check validity in upper limit
+        speed_left, speed_right = speed_left if speed_left < 100 else 100, speed_right if speed_right < 100 else 100
+        print(f"{speed_left=:2f} {speed_right=:2f}")
 
         if joystick.get_button(0):
             s.stop()
@@ -72,21 +80,13 @@ def main() -> None:
         elif joystick.get_button(5):
             s.move_motors(True, 90, False)
             s.move_motors(False, 90, True)
-        elif speed > 0:
-            speed_left, speed_right = speed_left if speed_left > 0 else 0, speed_right if speed_right > 0 else 0
-            print(f"i:{speed_left:2f} d:{speed_right:2f}")
-
-            s.move_motors(True, speed_left, True)
-            s.move_motors(False, speed_right, True)
         else:
-            speed_left, speed_right = speed_left if speed_left < 0 else 0, speed_right if speed_right < 0 else 0
-            print(f"i:{speed_left:2f} d:{speed_right:2f}")
-
-            s.move_motors(True, -speed_left, False)
-            s.move_motors(False, -speed_right, False)
+            s.move_motors(True, speed_left, direction)
+            s.move_motors(False, speed_right, direction)
 
         if joystick.get_button(8):
             s.stop()
+            s.disable_motors()
             done = True
             joystick.quit()
 
