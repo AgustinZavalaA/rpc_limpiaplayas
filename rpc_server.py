@@ -18,10 +18,10 @@ class DriverMotors:
     def move(self, motor: bool, speed: int, direction: bool) -> None:
         self.motors.move(motor, speed, direction)
 
-    def disable(self) -> None:
+    def disable_motors(self) -> None:
         self.motors.disable()
 
-    def stop(self) -> None:
+    def stop_motors(self) -> None:
         self.motors.stop()
 
 
