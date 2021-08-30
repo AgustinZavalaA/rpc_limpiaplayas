@@ -2,7 +2,12 @@ import xmlrpc.client
 import pygame
 
 
-def print_info(joystick):
+def print_info(joystick) -> None:
+    """Print the current information gathered from the Xbox controller input
+
+    Args:
+        joystick ([pygame joystick]): Current joystick instance
+    """
     print(f"dir = {joystick.get_axis(0):.2f}")
     print(f"ret = {joystick.get_axis(2):.2f}")
     print(f"ava = {joystick.get_axis(5):.2f}")
@@ -16,13 +21,14 @@ def print_info(joystick):
     print(f"exit  = {joystick.get_button(8):.2f}")
 
 
-def main():
+def main() -> None:
     pygame.init()
 
+    # Init the server with the raspberry, also it checks the connection with a hello world
     s = xmlrpc.client.ServerProxy("http://192.168.0.10:8000")
     print(s.hello())
 
-    # Loop until the user clicks the close button.
+    # Loop until the user clicks the xbox button
     done = False
 
     # Initialize the joysticks
@@ -30,12 +36,14 @@ def main():
     speed = 0
 
     while not done:
+        # Probably unnecessary evenet to get the state of the buttons
         for event in pygame.event.get():
             if event.type == pygame.JOYBUTTONDOWN:
                 print("Joystick button pressed.")
             if event.type == pygame.JOYBUTTONUP:
                 print("Joystick button released.")
 
+        # Pause the program until there is a valid controller
         if pygame.joystick.get_count() < 1:
             print("no hay control")
             while pygame.joystick.get_count() < 1:
@@ -46,11 +54,15 @@ def main():
 
         print_info(joystick)
 
-        # if joystick.get_axis(5) > -0.9:
-        f = lambda x: 45 * x + 45
+        f = lambda x: 35 * x + 35
         speed = f(joystick.get_axis(5)) - f(joystick.get_axis(2))
-        print(speed)
-        # else:
+        # print(speed)
+
+        y = lambda x: 30 * x
+        mod = y(joystick.get_axis(0))
+        # print(mod)
+        print(f"i:{speed-mod:2f} d:{speed+mod:2f}")
+        speed_left, speed_right = speed - mod, speed + mod
 
         if joystick.get_button(0):
             s.stop()
@@ -61,11 +73,17 @@ def main():
             s.move_motors(True, 90, False)
             s.move_motors(False, 90, True)
         elif speed > 0:
-            s.move_motors(True, speed, True)
-            s.move_motors(False, speed, True)
+            speed_left, speed_right = speed_left if speed_left > 0 else 0, speed_right if speed_right > 0 else 0
+            print(f"i:{speed_left:2f} d:{speed_right:2f}")
+
+            s.move_motors(True, speed_left, True)
+            s.move_motors(False, speed_right, True)
         else:
-            s.move_motors(True, -speed, False)
-            s.move_motors(False, -speed, False)
+            speed_left, speed_right = speed_left if speed_left < 0 else 0, speed_right if speed_right < 0 else 0
+            print(f"i:{speed_left:2f} d:{speed_right:2f}")
+
+            s.move_motors(True, -speed_left, False)
+            s.move_motors(False, -speed_right, False)
 
         if joystick.get_button(8):
             s.stop()
