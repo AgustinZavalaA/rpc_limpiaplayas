@@ -85,7 +85,7 @@ def main() -> None:
             s.move_motors(False, speed_right, direction)
 
         if joystick.get_button(8):
-            s.stop()
+            s.stop_motors()
             s.disable_motors()
             done = True
             joystick.quit()

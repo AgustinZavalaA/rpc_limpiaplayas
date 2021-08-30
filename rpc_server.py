@@ -15,7 +15,7 @@ def add(x, y):
 class DriverMotors:
     motors = Motors()
 
-    def move(self, motor: bool, speed: int, direction: bool) -> None:
+    def move_motors(self, motor: bool, speed: int, direction: bool) -> None:
         self.motors.move(motor, speed, direction)
 
     def disable_motors(self) -> None:
