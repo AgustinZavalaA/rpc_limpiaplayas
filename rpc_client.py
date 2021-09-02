@@ -2,7 +2,7 @@ import xmlrpc.client
 import pygame
 
 
-def print_info(joystick) -> None:
+def print_joystick_info(joystick) -> None:
     """Print the current information gathered from the Xbox controller input
 
     Args:
@@ -21,6 +21,10 @@ def print_info(joystick) -> None:
     print(f"exit  = {joystick.get_button(8):.2f}")
 
 
+def print_ultrasonic_info():
+    print(f"")
+
+
 def main() -> None:
     MAX_LINEAR_SPEED = 90
     MAX_CURVE_SPEED = 40
@@ -28,7 +32,6 @@ def main() -> None:
 
     # Init the server with the raspberry, also it checks the connection with a hello world
     s = xmlrpc.client.ServerProxy("http://192.168.0.10:8000")
-    print(s.hello())
 
     # Loop until the user clicks the xbox button
     done = False
@@ -54,7 +57,7 @@ def main() -> None:
         joystick = pygame.joystick.Joystick(0)
         joystick.init()
 
-        print_info(joystick)
+        # print_joystick_info(joystick)
 
         f = lambda x: MAX_LINEAR_SPEED / 2 * x + MAX_LINEAR_SPEED / 2
         speed = f(joystick.get_axis(5)) - f(joystick.get_axis(2))
@@ -70,10 +73,9 @@ def main() -> None:
         speed_left, speed_right = speed_left if speed_left > 0 else 0, speed_right if speed_right > 0 else 0
         # Check validity in upper limit
         speed_left, speed_right = speed_left if speed_left < 100 else 100, speed_right if speed_right < 100 else 100
-        print(f"{speed_left=:2f} {speed_right=:2f}")
 
         if joystick.get_button(0):
-            s.stop()
+            s.stop_motors()
         elif joystick.get_button(4):
             s.move_motors(True, 90, True)
             s.move_motors(False, 90, False)
