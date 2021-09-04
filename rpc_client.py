@@ -91,6 +91,12 @@ def main() -> None:
             # s.disable_motors()
             done = True
             joystick.quit()
+        elif joystick.get_button(7):
+            s.stop_motors()
+            s.disable_motors()
+            s.close_arduino()
+            done = True
+            joystick.quit()
 
 
 if __name__ == "__main__":
