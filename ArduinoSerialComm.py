@@ -4,7 +4,7 @@ import time
 
 
 class ArduinoComm:
-    def __init__(self, port: str = "/dev/ttyACM0", baudrate: int = 115200, timeout: float = 0.5) -> None:
+    def __init__(self, port: str = "/dev/ttyACM0", baudrate: int = 115200, timeout: float = 0.1) -> None:
         self.ser = serial.Serial(port, baudrate, timeout=timeout)
         self.ser.flush()
 
@@ -23,7 +23,7 @@ class ArduinoComm:
 
 def main():
     arduino = ArduinoComm()
-    time.sleep(1.5)
+    time.sleep(2)
 
     # print(arduino.communicate())
     # print(arduino.communicate("2"))
