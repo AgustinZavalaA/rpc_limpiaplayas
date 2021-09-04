@@ -27,7 +27,7 @@ def main():
 
     print(arduino.communicate())
     print(arduino.communicate("2"))
-
+    time.sleep(3)
     try:
         while True:
             print(arduino.communicate())
