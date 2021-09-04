@@ -10,19 +10,23 @@ class ArduinoComm:
 
     def communicate(self, data: str = "1") -> Tuple[int, int, List[str]]:
         self.ser.write(data.encode("ascii"))
-        # time.sleep(0.1)
-        # works with sleep 1
+        if data != "1":
+            return 0, 0, []
+
         line = self.ser.readline().decode("ascii").rstrip()
         line_list = line.split(",")
-        return int(line_list[0]), int(line_list[0]), line_list[2:]
+        return int(line_list[0]), int(line_list[1]), line_list[2:]
 
-    def close(self):
+    def close(self) -> None:
         self.ser.close()
 
 
 def main():
     arduino = ArduinoComm()
     time.sleep(3)
+
+    print(arduino.communicate())
+    print(arduino.communicate("2"))
 
     try:
         while True:
