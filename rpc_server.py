@@ -1,9 +1,12 @@
 from xmlrpc.server import SimpleXMLRPCServer
 from Motors import Motors
+from ArduinoSerialComm import ArduinoComm
+import time
 
 
-class DriverMotors:
+class ServerObjects:
     motors = Motors()
+    arduino = ArduinoComm()
 
     def move_motors(self, motor: bool, speed: int, direction: bool) -> None:
         self.motors.move(motor, speed, direction)
