@@ -23,7 +23,7 @@ class ArduinoComm:
 
 def main():
     arduino = ArduinoComm()
-    time.sleep(1)
+    time.sleep(1.5)
 
     # print(arduino.communicate())
     # print(arduino.communicate("2"))
