@@ -1,3 +1,4 @@
+from typing import List, Tuple
 from xmlrpc.server import SimpleXMLRPCServer
 from Motors import Motors
 from ArduinoSerialComm import ArduinoComm
@@ -19,7 +20,7 @@ class ServerObjects:
     def stop_motors(self) -> None:
         self.motors.stop()
 
-    def communicate_arduino(self, data: str = "1") -> tuple[int, int, list[str]]:
+    def communicate_arduino(self, data: str = "1") -> Tuple[int, int, List[str]]:
         return self.arduino.communicate(data)
 
     def close_arduino(self) -> None:
