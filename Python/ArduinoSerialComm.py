@@ -23,11 +23,10 @@ class ArduinoComm:
 
 def main():
     arduino = ArduinoComm()
+    # Cantidad minima de sleep seguido de hacer unainstancia
     time.sleep(2)
 
-    # print(arduino.communicate())
-    # print(arduino.communicate("2"))
-    # time.sleep(3)
+    # si se necesita hacer un communicate("2") se necesita implementar un sleep seguido de este
     try:
         while True:
             print(arduino.communicate())
@@ -37,17 +36,4 @@ def main():
 
 
 if __name__ == "__main__":
-    # ser = serial.Serial("/dev/ttyACM0", 115200, timeout=0.1)
-    # ser.flush()
-    # time.sleep(3)
-    # try:
-    #     while True:
-    #         ser.write(b"1")
-    #         time.sleep(0.1)
-    #         # works with sleep 1
-    #         line = ser.readline().decode("ascii").rstrip()
-
-    #         print(line.split(","))
-    # except KeyboardInterrupt:
-    #     ser.close()
     main()

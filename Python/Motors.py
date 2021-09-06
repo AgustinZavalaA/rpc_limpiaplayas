@@ -7,11 +7,11 @@ class Motors:
         GPIO.setmode(GPIO.BOARD)
 
         # Motor A
-        self.PWMA = 12
+        self.PWMAIN = 12
         self.AIN1 = 13
         self.AIN2 = 15
         # Motor B
-        self.PWMB = 35
+        self.PWMBIN = 35
         self.BIN1 = 16
         self.BIN2 = 18
 
@@ -20,21 +20,21 @@ class Motors:
         GPIO.setup(self.BIN1, GPIO.OUT)
         GPIO.setup(self.BIN2, GPIO.OUT)
 
-        GPIO.setup(self.PWMA, GPIO.OUT)  # Set GPIO pin 12 to output mode.
-        self.pwmA = GPIO.PWM(self.PWMA, 100)  # Initialize PWM on pwmPin 100Hz frequency
+        GPIO.setup(self.PWMAIN, GPIO.OUT)  # Set GPIO pin 12 to output mode.
+        self.pwm_a = GPIO.PWM(self.PWMAIN, 100)  # Initialize PWM on pwmPin 100Hz frequency
 
-        GPIO.setup(self.PWMB, GPIO.OUT)
-        self.pwmB = GPIO.PWM(self.PWMB, 100)  # Initialize PWM on pwmPin 100Hz frequency
+        GPIO.setup(self.PWMBIN, GPIO.OUT)
+        self.pwm_b = GPIO.PWM(self.PWMBIN, 100)  # Initialize PWM on pwmPin 100Hz frequency
 
         dc = 0  # set dc variable to 0 for 0%
-        self.pwmA.start(dc)  # Start PWM with 0% duty cycle
-        self.pwmB.start(dc)
+        self.pwm_a.start(dc)  # Start PWM with 0% duty cycle
+        self.pwm_b.start(dc)
 
     def stop(self) -> None:
         # GPIO.output(STBY, False)
         dc = 0
-        self.pwmA.ChangeDutyCycle(dc)
-        self.pwmB.ChangeDutyCycle(dc)
+        self.pwm_a.ChangeDutyCycle(dc)
+        self.pwm_b.ChangeDutyCycle(dc)
 
         GPIO.output(self.AIN1, GPIO.LOW)
         GPIO.output(self.AIN2, GPIO.LOW)
@@ -52,16 +52,16 @@ class Motors:
         if motor:
             GPIO.output(self.AIN1, in_pin1)
             GPIO.output(self.AIN2, in_pin2)
-            self.pwmA.ChangeDutyCycle(speed)
+            self.pwm_a.ChangeDutyCycle(speed)
         else:
             GPIO.output(self.BIN1, in_pin1)
             GPIO.output(self.BIN2, in_pin2)
-            self.pwmB.ChangeDutyCycle(speed)
+            self.pwm_b.ChangeDutyCycle(speed)
 
     def disable(self) -> None:
         self.stop()
-        self.pwmA.stop()  # stop PWM
-        self.pwmB.stop()  # stop PWM
+        self.pwm_a.stop()  # stop PWM
+        self.pwm_b.stop()  # stop PWM
         GPIO.cleanup()  # resets GPIO ports used back to input mode
 
 
