@@ -1,4 +1,3 @@
-from typing import List, Tuple
 import serial
 import time
 
@@ -8,7 +7,7 @@ class ArduinoComm:
         self.ser = serial.Serial(port, baudrate, timeout=timeout)
         self.ser.flush()
 
-    def communicate(self, data: str = "1") -> Tuple[int, int, List[str]]:
+    def communicate(self, data: str = "1") -> tuple[int, int, list[str]]:
         self.ser.write(data.encode("ascii"))
         if data != "1":
             return 0, 0, []

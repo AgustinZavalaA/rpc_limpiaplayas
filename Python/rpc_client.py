@@ -21,8 +21,14 @@ def print_joystick_info(joystick) -> None:
     print(f"exit  = {joystick.get_button(8):.2f}")
 
 
-def print_ultrasonic_info() -> None:
-    print(f"")
+def print_arduino_info(arduino_data: tuple[int, int, list[int]]) -> None:
+    btn_pause, btn_mode, ultrasonic_values = arduino_data
+    print(f" {ultrasonic_values[3]:2d}  {ultrasonic_values[0]:2d}   {ultrasonic_values[4]:2d} ")
+    print(f"    \ | /    ")
+    print(f"{ultrasonic_values[2]:2d}--  B  --{ultrasonic_values[5]:2d}")
+    print(f"    /   \    ")
+    print(f" {ultrasonic_values[1]:2d}       {ultrasonic_values[6]:2d} ")
+    print(f"Pause = {btn_pause}, Mode = {btn_mode}")
 
 
 def main() -> None:
@@ -57,6 +63,8 @@ def main() -> None:
         joystick = pygame.joystick.Joystick(0)
         joystick.init()
 
+        arduino_data = s.communicate_arduino()
+        print_arduino_info(arduino_data)
         # print_joystick_info(joystick)
 
         f = lambda x: MAX_LINEAR_SPEED / 2 * x + MAX_LINEAR_SPEED / 2
