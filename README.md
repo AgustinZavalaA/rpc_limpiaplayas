@@ -4,6 +4,8 @@ Programas necesarios para el correcto funcionamiento del robot limpiaplayas a co
 
 Probablemente sirva como base para el proyecto final del TMR.
 
+Un seguimiento de las tares por hacer se pueden ver en el siguiente link. [Trello](https://trello.com/invite/limpiaplayas2022/fc509e9bc30deefa1a7254b913e51726)
+
 ## Descripcion
 
 Actualmente cuenta con el codigo dividido en varias clases en distintos archivos, en la version final se espera que todos los codigos de prueba esten implementados en los programas rpc_server y client.

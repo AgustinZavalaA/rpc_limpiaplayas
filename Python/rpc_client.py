@@ -21,7 +21,7 @@ def print_joystick_info(joystick) -> None:
     print(f"exit  = {joystick.get_button(8):.2f}")
 
 
-def print_ultrasonic_info():
+def print_ultrasonic_info() -> None:
     print(f"")
 
 

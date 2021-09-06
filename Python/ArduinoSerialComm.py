@@ -21,9 +21,9 @@ class ArduinoComm:
         self.ser.close()
 
 
-def main():
+def main() -> None:
     arduino = ArduinoComm()
-    # Cantidad minima de sleep seguido de hacer unainstancia
+    # Cantidad minima de sleep seguido de hacer una instancia
     time.sleep(2)
 
     # si se necesita hacer un communicate("2") se necesita implementar un sleep seguido de este
