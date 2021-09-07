@@ -39,7 +39,7 @@ def main() -> None:
     parent_conn, child_conn = Pipe()
     p = Process(target=camera.process_video, args=(child_conn,))
     p.start()
-    print(parent_conn.recv())
+    # print(parent_conn.recv())
     p.join()
 
 
