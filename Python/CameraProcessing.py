@@ -25,7 +25,7 @@ class CameraProcessing:
             cv2.imshow("Frame", image)
             key = cv2.waitKey(1) & 0xFF
             # clear the stream in preparation for the next frame
-            self.rawCapture.truncate(0)
+            self.raw_capture.truncate(0)
             # if the `q` key was pressed, break from the loop
             if key == ord("q"):
                 break
