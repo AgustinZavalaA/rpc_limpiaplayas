@@ -1,5 +1,6 @@
 import xmlrpc.client
 import pygame
+import numpy as np
 
 
 def print_joystick_info(joystick) -> None:
@@ -21,19 +22,25 @@ def print_joystick_info(joystick) -> None:
     print(f"exit  = {joystick.get_button(8):.2f}")
 
 
-def print_arduino_info(arduino_data: tuple[int, int, list[int]]) -> None:
+def print_arduino_info(arduino_data: tuple[int, int, list[int]], stop_distance: int = 20) -> None:
     btn_pause, btn_mode, ultrasonic_values = arduino_data
-    print(f" {ultrasonic_values[3]:2d}  {ultrasonic_values[0]:2d}   {ultrasonic_values[4]:2d} ")
-    print(f"    \ | /    ")
-    print(f"{ultrasonic_values[2]:2d}--  B  --{ultrasonic_values[5]:2d}")
-    print(f"    /   \    ")
-    print(f" {ultrasonic_values[1]:2d}       {ultrasonic_values[6]:2d} ")
+    ultrasonic_values = [int(x) for x in ultrasonic_values]
+    ultrasonic_values = np.array(ultrasonic_values)
+    if (ultrasonic_values < stop_distance).any():
+        print("\033[91mCUIDADO VAS A CHOCAR\033[0m")
+
+    print(" %2d  %2d   %2d " % (ultrasonic_values[3], ultrasonic_values[0], ultrasonic_values[4]))
+    print("    \ | /    ")
+    print("%2d--  🤖 --%2d" % (ultrasonic_values[2], ultrasonic_values[5]))
+    print("    /   \    ")
+    print(" %2d       %2d " % (ultrasonic_values[1], ultrasonic_values[6]))
     print(f"Pause = {btn_pause}, Mode = {btn_mode}")
 
 
 def main() -> None:
     MAX_LINEAR_SPEED = 90
     MAX_CURVE_SPEED = 40
+    STOP_DISTANCE = 20
     pygame.init()
 
     # Init the server with the raspberry, also it checks the connection with a hello world
@@ -64,7 +71,7 @@ def main() -> None:
         joystick.init()
 
         arduino_data = s.communicate_arduino()
-        print_arduino_info(arduino_data)
+        print_arduino_info(arduino_data, STOP_DISTANCE)
         # print_joystick_info(joystick)
 
         f = lambda x: MAX_LINEAR_SPEED / 2 * x + MAX_LINEAR_SPEED / 2
