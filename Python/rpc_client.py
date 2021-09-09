@@ -41,7 +41,7 @@ def main() -> None:
     MAX_LINEAR_SPEED = 90
     MAX_CURVE_SPEED = 40
     STOP_DISTANCE = 20
-    # spee
+    last_speed_left, last_speed_right = 0, 0
     pygame.init()
 
     # Init the server with the raspberry, also it checks the connection with a hello world
@@ -85,10 +85,16 @@ def main() -> None:
         mod = y(joystick.get_axis(0))
 
         speed_left, speed_right = speed - mod, speed + mod
-        # Check validity in lower limit
+        # Check validity in lower, upper limit
         speed_left, speed_right = speed_left if speed_left > 0 else 0, speed_right if speed_right > 0 else 0
-        # Check validity in upper limit
         speed_left, speed_right = speed_left if speed_left < 100 else 100, speed_right if speed_right < 100 else 100
+
+        # smooth control
+        speed_left, speed_right = (
+            0.05 * speed_left + 0.95 * last_speed_left,
+            0.05 * speed_right + 0.95 * last_speed_right,
+        )
+        last_speed_left, last_speed_right = speed_left, speed_right
 
         if joystick.get_button(0):
             s.stop_motors()
