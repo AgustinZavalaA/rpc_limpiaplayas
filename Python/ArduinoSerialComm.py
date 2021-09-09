@@ -25,7 +25,7 @@ def main() -> None:
     arduino = ArduinoComm()
     # Cantidad minima de sleep seguido de hacer una instancia
     time.sleep(2)
-    arduino.communicate("2")
+    print(arduino.communicate("2"))
     time.sleep(2)
 
     # si se necesita hacer un communicate("2") se necesita implementar un sleep seguido de este
