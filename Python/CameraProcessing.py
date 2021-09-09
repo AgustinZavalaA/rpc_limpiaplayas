@@ -44,8 +44,8 @@ class CameraProcessing:
 
     def process_video_detect_mp_handler(self, parent_conn: Pipe):
         while True:
-            if not parent_conn.empty():
-                print(parent_conn.recv())
+            # if not parent_conn.empty():
+            print(parent_conn.recv())
 
     def process_video_detect(self, frame):
         key = None
