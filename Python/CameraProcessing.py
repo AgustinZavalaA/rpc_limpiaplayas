@@ -57,7 +57,7 @@ class CameraProcessing:
 
 def main() -> None:
     # Normal way
-    camera = CameraProcessing(show=True)
+    camera = CameraProcessing(show=False)
     try:
         for frame in camera.stream:
             key, detect_result = camera.process_video_detect(frame)
