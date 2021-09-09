@@ -41,6 +41,7 @@ def main() -> None:
     MAX_LINEAR_SPEED = 90
     MAX_CURVE_SPEED = 40
     STOP_DISTANCE = 20
+    # spee
     pygame.init()
 
     # Init the server with the raspberry, also it checks the connection with a hello world
