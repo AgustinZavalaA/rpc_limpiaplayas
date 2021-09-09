@@ -24,15 +24,16 @@ class CameraProcessing:
         # allow the camera to warmup
         time.sleep(0.1)
 
-    def process_video_detect(self) -> List[float]:
+    def process_video_detect_mp(self) -> List[float]:
         # capture frames from the camera
         for frame in self.stream:
             # grab the raw NumPy array representing the image, then initialize the timestamp
             # and occupied/unoccupied text
             image = frame.array
             # show the frame
-            cv2.imshow("Frame", image)
-            key = cv2.waitKey(1) & 0xFF
+            if self.show_camera:
+                cv2.imshow("Frame", image)
+                key = cv2.waitKey(1) & 0xFF
             # clear the stream in preparation for the next frame
             self.raw_capture.truncate(0)
             # if the `q` key was pressed, break from the loop
@@ -45,8 +46,9 @@ class CameraProcessing:
         # and occupied/unoccupied text
         image = frame.array
         # show the frame
-        cv2.imshow("Frame", image)
-        key = cv2.waitKey(1) & 0xFF
+        if self.show_camera:
+            cv2.imshow("Frame", image)
+            key = cv2.waitKey(1) & 0xFF
         # clear the stream in preparation for the next frame
         self.raw_capture.truncate(0)
         # if the `q` key was pressed, break from the loop
@@ -54,12 +56,16 @@ class CameraProcessing:
 
 
 def main() -> None:
+    # Normal way
     camera = CameraProcessing(show=True)
-    for frame in camera.stream:
-        key, detect_result = camera.process_video_detect(frame)
-        print(detect_result)
-        if key == ord("q"):
-            break
+    try:
+        for frame in camera.stream:
+            key, detect_result = camera.process_video_detect(frame)
+            print(detect_result)
+            if key == ord("q"):
+                break
+    except KeyboardInterrupt:
+        print("bye bye")
     # camera = CameraProcessing()
     # parent_conn, child_conn = Pipe()
     # p = Process(target=camera.process_video, args=(child_conn,))
