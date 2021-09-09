@@ -42,8 +42,7 @@ class CameraProcessing:
                 break
 
     def process_video_detect(self, frame):
-        # grab the raw NumPy array representing the image, then initialize the timestamp
-        # and occupied/unoccupied text
+        key = None
         image = frame.array
         # show the frame
         if self.show_camera:
