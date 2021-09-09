@@ -24,7 +24,7 @@ class CameraProcessing:
         # allow the camera to warmup
         time.sleep(0.1)
 
-    def process_video_detect_mp(self) -> List[float]:
+    def process_video_detect_mp(self, child_conn: Pipe):
         # capture frames from the camera
         for frame in self.stream:
             # grab the raw NumPy array representing the image, then initialize the timestamp
@@ -36,10 +36,16 @@ class CameraProcessing:
                 key = cv2.waitKey(1) & 0xFF
             # clear the stream in preparation for the next frame
             self.raw_capture.truncate(0)
+            child_conn.send([0.0])
             # if the `q` key was pressed, break from the loop
             if key == ord("q"):
-                conn.close()
+                child_conn.close()
                 break
+
+    def process_video_detect_mp_handler(self, parent_conn: Pipe):
+        while True:
+            if not parent_conn.empty():
+                print(parent_conn.recv())
 
     def process_video_detect(self, frame):
         key = None
@@ -56,21 +62,28 @@ class CameraProcessing:
 
 def main() -> None:
     # Normal way
-    camera = CameraProcessing(show=False)
+    # camera = CameraProcessing(show=False)
+    # try:
+    #     for frame in camera.stream:
+    #         key, detect_result = camera.process_video_detect(frame)
+    #         print(detect_result)
+    #         if key == ord("q"):
+    #             break
+    # except KeyboardInterrupt:
+    #     print("bye bye")
+
+    # With multiprocessing
+    camera = CameraProcessing(show=True)
+    parent_conn, child_conn = Pipe()
+    process1 = Process(target=camera.process_video_detect_mp, args=(child_conn,))
+    process2 = Process(target=camera.process_video_detect_mp_handler, args=(parent_conn,))
     try:
-        for frame in camera.stream:
-            key, detect_result = camera.process_video_detect(frame)
-            print(detect_result)
-            if key == ord("q"):
-                break
+        process1.start()
+        process2.start()
+        process1.join()
+        process2.join()
     except KeyboardInterrupt:
         print("bye bye")
-    # camera = CameraProcessing()
-    # parent_conn, child_conn = Pipe()
-    # p = Process(target=camera.process_video, args=(child_conn,))
-    # p.start()
-    # # print(parent_conn.recv())
-    # p.join()
 
 
 if __name__ == "__main__":
