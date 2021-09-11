@@ -27,6 +27,7 @@ class CameraProcessing:
     def process_video_detect_mp(self, child_conn: Pipe):
         print("MOstrando camara")
         # capture frames from the camera
+        print(self.stream)
         for frame in self.stream:
             print("xd??")
             # grab the raw NumPy array representing the image, then initialize the timestamp
