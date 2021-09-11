@@ -28,6 +28,7 @@ class CameraProcessing:
         print("MOstrando camara")
         # capture frames from the camera
         for frame in self.stream:
+            print("xd??")
             # grab the raw NumPy array representing the image, then initialize the timestamp
             # and occupied/unoccupied text
             image = frame.array
