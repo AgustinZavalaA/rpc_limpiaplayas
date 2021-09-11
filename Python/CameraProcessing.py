@@ -64,6 +64,22 @@ class CameraProcessing:
         return key, [0.0]
 
 
+def process_video_detect_mp_function(child_conn: Pipe):
+    camera = CameraProcessing(show=True)
+    for frame in camera.stream:
+        key, detect_result = camera.process_video_detect(frame)
+        child_conn.send(detect_result)
+        if key == ord("q"):
+            break
+
+
+def process_video_detect_mp_handler_function(parent_conn: Pipe):
+    print("handling")
+    while True:
+        # if not parent_conn.empty():
+        print(parent_conn.recv())
+
+
 def main() -> None:
     # Normal way
     # camera = CameraProcessing(show=False)
@@ -77,10 +93,10 @@ def main() -> None:
     #     print("bye bye")
 
     # With multiprocessing
-    camera = CameraProcessing(show=False)
+    # camera = CameraProcessing(show=False)
     parent_conn, child_conn = Pipe()
-    process1 = Process(target=camera.process_video_detect_mp, args=(child_conn,))
-    process2 = Process(target=camera.process_video_detect_mp_handler, args=(parent_conn,))
+    process1 = Process(target=process_video_detect_mp_function, args=(child_conn,))
+    process2 = Process(target=process_video_detect_mp_handler_function, args=(parent_conn,))
     process1.start()
     process2.start()
     try:
