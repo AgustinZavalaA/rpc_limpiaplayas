@@ -25,6 +25,7 @@ class CameraProcessing:
         time.sleep(0.1)
 
     def process_video_detect_mp(self, child_conn: Pipe):
+        print("MOstrando camara")
         # capture frames from the camera
         for frame in self.stream:
             # grab the raw NumPy array representing the image, then initialize the timestamp
@@ -43,6 +44,7 @@ class CameraProcessing:
                 break
 
     def process_video_detect_mp_handler(self, parent_conn: Pipe):
+        print("handling")
         while True:
             # if not parent_conn.empty():
             print(parent_conn.recv())
