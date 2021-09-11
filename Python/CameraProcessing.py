@@ -77,13 +77,15 @@ def main() -> None:
     parent_conn, child_conn = Pipe()
     process1 = Process(target=camera.process_video_detect_mp, args=(child_conn,))
     process2 = Process(target=camera.process_video_detect_mp_handler, args=(parent_conn,))
+    process1.start()
+    process2.start()
     try:
-        process1.start()
-        process2.start()
         process1.join()
         process2.join()
     except KeyboardInterrupt:
         print("bye bye")
+        process1.terminate()
+        process2.terminate()
 
 
 if __name__ == "__main__":
