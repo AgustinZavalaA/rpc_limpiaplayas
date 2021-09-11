@@ -38,7 +38,7 @@ class CameraProcessing:
             self.raw_capture.truncate(0)
             child_conn.send([0.0])
             # if the `q` key was pressed, break from the loop
-            if key == ord("q"):
+            if key == ord("q") and self.show_camera:
                 child_conn.close()
                 break
 
@@ -73,7 +73,7 @@ def main() -> None:
     #     print("bye bye")
 
     # With multiprocessing
-    camera = CameraProcessing(show=True)
+    camera = CameraProcessing(show=False)
     parent_conn, child_conn = Pipe()
     process1 = Process(target=camera.process_video_detect_mp, args=(child_conn,))
     process2 = Process(target=camera.process_video_detect_mp_handler, args=(parent_conn,))
