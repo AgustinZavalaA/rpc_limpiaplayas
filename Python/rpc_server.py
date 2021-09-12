@@ -37,36 +37,36 @@ def server_function():
 
 def main():
     # NORMAL WAY
-    # set up the server
-    # server = SimpleXMLRPCServer(("192.168.0.10", 8000), allow_none=True, logRequests=False)
+    set up the server
+    server = SimpleXMLRPCServer(("192.168.0.10", 8000), allow_none=True, logRequests=False)
 
-    # # register our functions
-    # server.register_instance(ServerObjects())
-    # # Run the server's main loop
-    # try:
-    #     server.serve_forever()
-    # except KeyboardInterrupt:
-    #     print("Exiting")
+    # register our functions
+    server.register_instance(ServerObjects())
+    # Run the server's main loop
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("Exiting")
 
     # Multiprocessing
-    parent_conn, child_conn = Pipe()
+    # parent_conn, child_conn = Pipe()
 
-    video_stream = Process(target=process_video_detect_mp_function, args=(child_conn,))
-    video_handler = Process(target=process_video_detect_mp_handler_function, args=(parent_conn,))
-    rpc_server = Process(target=server_function)
+    # video_stream = Process(target=process_video_detect_mp_function, args=(child_conn,))
+    # video_handler = Process(target=process_video_detect_mp_handler_function, args=(parent_conn,))
+    # rpc_server = Process(target=server_function)
 
-    video_stream.start()
-    video_handler.start()
-    rpc_server.start()
-    try:
-        video_stream.join()
-        video_handler.join()
-        rpc_server.join()
-    except KeyboardInterrupt:
-        print("bye bye")
-        rpc_server.terminate()
-        video_stream.terminate()
-        video_handler.terminate()
+    # video_stream.start()
+    # video_handler.start()
+    # rpc_server.start()
+    # try:
+    #     video_stream.join()
+    #     video_handler.join()
+    #     rpc_server.join()
+    # except KeyboardInterrupt:
+    #     print("bye bye")
+    #     rpc_server.terminate()
+    #     video_stream.terminate()
+    #     video_handler.terminate()
 
 
 if __name__ == "__main__":
