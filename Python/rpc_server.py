@@ -3,6 +3,8 @@ from xmlrpc.server import SimpleXMLRPCServer
 from Motors import Motors
 from ArduinoSerialComm import ArduinoComm
 import time
+from multiprocessing import Process, Pipe
+from CameraProcessing import process_video_detect_mp_function, process_video_detect_mp_handler_function
 
 
 class ServerObjects:
@@ -28,16 +30,40 @@ class ServerObjects:
 
 
 def main():
+    # NORMAL WAY
     # set up the server
-    server = SimpleXMLRPCServer(("192.168.0.10", 8000), allow_none=True, logRequests=False)
+    # server = SimpleXMLRPCServer(("192.168.0.10", 8000), allow_none=True, logRequests=False)
 
-    # register our functions
+    # # register our functions
+    # server.register_instance(ServerObjects())
+    # # Run the server's main loop
+    # try:
+    #     server.serve_forever()
+    # except KeyboardInterrupt:
+    #     print("Exiting")
+
+    # Multiprocessing
+    server = SimpleXMLRPCServer(("192.168.0.10", 8000), allow_none=True, logRequests=False)
     server.register_instance(ServerObjects())
-    # Run the server's main loop
+
+    parent_conn, child_conn = Pipe()
+
+    video_stream = Process(target=process_video_detect_mp_function, args=(child_conn,))
+    video_handler = Process(target=process_video_detect_mp_handler_function, args=(parent_conn,))
+    rpc_server = Process(target=server.serve_forever)
+
+    video_stream.start()
+    video_handler.start()
+    rpc_server.start()
     try:
-        server.serve_forever()
+        video_stream.join()
+        video_handler.join()
+        rpc_server.join()
     except KeyboardInterrupt:
-        print("Exiting")
+        print("bye bye")
+        rpc_server.terminate()
+        video_stream.terminate()
+        video_handler.terminate()
 
 
 if __name__ == "__main__":
