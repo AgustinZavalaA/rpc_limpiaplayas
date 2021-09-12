@@ -27,13 +27,18 @@ class ServerObjects:
         self.arduino.close()
 
 
-# set up the server
-server = SimpleXMLRPCServer(("192.168.0.10", 8000), allow_none=True, logRequests=False)
+def main():
+    # set up the server
+    server = SimpleXMLRPCServer(("192.168.0.10", 8000), allow_none=True, logRequests=False)
 
-# register our functions
-server.register_instance(ServerObjects())
-# Run the server's main loop
-try:
-    server.serve_forever()
-except KeyboardInterrupt:
-    print("Exiting")
+    # register our functions
+    server.register_instance(ServerObjects())
+    # Run the server's main loop
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("Exiting")
+
+
+if __name__ == "__main__":
+    main()
