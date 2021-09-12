@@ -29,6 +29,12 @@ class ServerObjects:
         self.arduino.close()
 
 
+def server_function():
+    server = SimpleXMLRPCServer(("192.168.0.10", 8000), allow_none=True, logRequests=False)
+    server.register_instance(ServerObjects())
+    server.serve_forever()
+
+
 def main():
     # NORMAL WAY
     # set up the server
@@ -43,14 +49,11 @@ def main():
     #     print("Exiting")
 
     # Multiprocessing
-    server = SimpleXMLRPCServer(("192.168.0.10", 8000), allow_none=True, logRequests=False)
-    server.register_instance(ServerObjects())
-
     parent_conn, child_conn = Pipe()
 
     video_stream = Process(target=process_video_detect_mp_function, args=(child_conn,))
     video_handler = Process(target=process_video_detect_mp_handler_function, args=(parent_conn,))
-    rpc_server = Process(target=server.serve_forever)
+    rpc_server = Process(target=server_function)
 
     video_stream.start()
     video_handler.start()
