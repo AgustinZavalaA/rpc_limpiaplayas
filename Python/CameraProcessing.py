@@ -65,7 +65,7 @@ class CameraProcessing:
 
 
 def process_video_detect_mp_function(child_conn: Pipe):
-    camera = CameraProcessing(show=True, resolution=(320, 240))
+    camera = CameraProcessing(show=True)
     for frame in camera.stream:
         key, detect_result = camera.process_video_detect(frame)
         child_conn.send(detect_result)
