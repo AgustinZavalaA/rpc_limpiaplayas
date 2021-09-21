@@ -1,3 +1,4 @@
+import time
 import xmlrpc.client
 import pygame
 import numpy as np
@@ -46,7 +47,7 @@ def main() -> None:
     pygame.init()
 
     # Init the server with the raspberry, also it checks the connection with a hello world
-    s = xmlrpc.client.ServerProxy("http://192.168.0.10:8000")
+    s = xmlrpc.client.ServerProxy("http://192.168.0.7:8000")
 
     # Loop until the user clicks the xbox button
     done = False
@@ -92,6 +93,14 @@ def main() -> None:
         # Check validity in lower, upper limit
         speed_left, speed_right = speed_left if speed_left > 0 else 0, speed_right if speed_right > 0 else 0
         speed_left, speed_right = speed_left if speed_left < 100 else 100, speed_right if speed_right < 100 else 100
+
+        # Buttons
+        if joystick.get_button(1):
+            s.communicate_arduino("2")
+            time.sleep(3)
+        if joystick.get_button(2):
+            s.communicate_arduino("3")
+            time.sleep(3)
 
         if joystick.get_button(0):
             s.stop_motors()
