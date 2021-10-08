@@ -38,7 +38,7 @@ def server_function():
 def main():
     # NORMAL WAY
     # set up the server
-    server = SimpleXMLRPCServer(("192.168.0.11", 8000), allow_none=True, logRequests=False)
+    server = SimpleXMLRPCServer(("192.168.0.7", 8000), allow_none=True, logRequests=False)
 
     # register our functions
     server.register_instance(ServerObjects())
