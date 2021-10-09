@@ -15,7 +15,12 @@ class ArduinoComm:
 
         line = self.ser.readline().decode("ascii").rstrip()
         line_list = line.split(",")
-        return int(line_list[0]), int(line_list[1]), line_list[2:]
+        r = None
+        try:
+            r = int(line_list[0]), int(line_list[1]), line_list[2:]
+        except ValueError:
+            r = None
+        return r
 
     def close(self) -> None:
         self.ser.close()
