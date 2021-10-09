@@ -25,6 +25,9 @@ def main() -> None:
     arduino = ArduinoComm()
     # Cantidad minima de sleep seguido de hacer una instancia
     time.sleep(2)
+    print(arduino.communicate())
+    print("nose")
+    time.sleep(2)
     print(arduino.communicate("2"))
     time.sleep(2)
 
@@ -40,4 +43,4 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-    #mlp
+    # mlp
