@@ -26,12 +26,8 @@ def main() -> None:
     # Cantidad minima de sleep seguido de hacer una instancia
     time.sleep(2)
     print(arduino.communicate())
-    print("nose")
-    time.sleep(2)
     print(arduino.communicate("2"))
-    time.sleep(2)
-    print(arduino.communicate("2"))
-    time.sleep(2)
+    time.sleep(3)
     print(arduino.communicate("2"))
     time.sleep(2)
 
