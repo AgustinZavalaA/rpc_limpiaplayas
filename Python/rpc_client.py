@@ -23,14 +23,19 @@ def print_joystick_info(joystick) -> None:
     print(f"exit  = {joystick.get_button(8):.2f}")
 
 
-def print_arduino_info(arduino_data: tuple[int, int, list[int]], stop_distance: int = 20) -> None:
+def print_arduino_info(
+    arduino_data: tuple[int, int, list[int]], stop_distance: int = 20
+) -> None:
     btn_pause, btn_mode, ultrasonic_values = arduino_data
     ultrasonic_values = [int(x) for x in ultrasonic_values]
     ultrasonic_values = np.array(ultrasonic_values)
     if (ultrasonic_values < stop_distance).any():
         print("\033[91mCUIDADO VAS A CHOCAR\033[0m")
 
-    print(" %2d  %2d   %2d " % (ultrasonic_values[3], ultrasonic_values[0], ultrasonic_values[4]))
+    print(
+        " %2d  %2d   %2d "
+        % (ultrasonic_values[3], ultrasonic_values[0], ultrasonic_values[4])
+    )
     print("    \ | /    ")
     print("%2d--  🤖 --%2d" % (ultrasonic_values[2], ultrasonic_values[5]))
     print("    /   \    ")
@@ -47,7 +52,7 @@ def main() -> None:
     pygame.init()
 
     # Init the server with the raspberry, also it checks the connection with a hello world
-    s = xmlrpc.client.ServerProxy("http://192.168.0.11:8000")
+    s = xmlrpc.client.ServerProxy("http://192.168.0.25:8000")
 
     # Loop until the user clicks the xbox button
     done = False
@@ -91,8 +96,14 @@ def main() -> None:
 
         speed_left, speed_right = speed - mod, speed + mod
         # Check validity in lower, upper limit
-        speed_left, speed_right = speed_left if speed_left > 0 else 0, speed_right if speed_right > 0 else 0
-        speed_left, speed_right = speed_left if speed_left < 100 else 100, speed_right if speed_right < 100 else 100
+        speed_left, speed_right = (
+            speed_left if speed_left > 0 else 0,
+            speed_right if speed_right > 0 else 0,
+        )
+        speed_left, speed_right = (
+            speed_left if speed_left < 100 else 100,
+            speed_right if speed_right < 100 else 100,
+        )
 
         # Buttons
         if joystick.get_button(1):

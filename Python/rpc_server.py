@@ -4,7 +4,10 @@ from Motors import Motors
 from ArduinoSerialComm import ArduinoComm
 import time
 from multiprocessing import Process, Pipe
-from CameraProcessing import process_video_detect_mp_function, process_video_detect_mp_handler_function
+from CameraProcessing import (
+    process_video_detect_mp_function,
+    process_video_detect_mp_handler_function,
+)
 
 
 class ServerObjects:
@@ -30,7 +33,9 @@ class ServerObjects:
 
 
 def server_function():
-    server = SimpleXMLRPCServer(("192.168.0.10", 8000), allow_none=True, logRequests=False)
+    server = SimpleXMLRPCServer(
+        ("192.168.0.10", 8000), allow_none=True, logRequests=False
+    )
     server.register_instance(ServerObjects())
     server.serve_forever()
 
@@ -38,7 +43,9 @@ def server_function():
 def main():
     # NORMAL WAY
     # set up the server
-    server = SimpleXMLRPCServer(("192.168.0.11", 8000), allow_none=True, logRequests=False)
+    server = SimpleXMLRPCServer(
+        ("192.168.0.25", 8000), allow_none=True, logRequests=False
+    )
 
     # register our functions
     server.register_instance(ServerObjects())
