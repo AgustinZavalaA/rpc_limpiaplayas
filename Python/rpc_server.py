@@ -44,7 +44,7 @@ def main():
     # NORMAL WAY
     # set up the server
     server = SimpleXMLRPCServer(
-        ("192.168.0.25", 8000), allow_none=True, logRequests=False
+        ("192.168.0.11", 8000), allow_none=True, logRequests=False
     )
 
     # register our functions

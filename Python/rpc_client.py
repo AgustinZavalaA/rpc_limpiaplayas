@@ -52,7 +52,7 @@ def main() -> None:
     pygame.init()
 
     # Init the server with the raspberry, also it checks the connection with a hello world
-    s = xmlrpc.client.ServerProxy("http://192.168.0.25:8000")
+    s = xmlrpc.client.ServerProxy("http://192.168.0.11:8000")
 
     # Loop until the user clicks the xbox button
     done = False
