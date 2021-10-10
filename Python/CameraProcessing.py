@@ -84,7 +84,7 @@ def process_video_detect_mp_handler_function(parent_conn: Pipe):
 
 def main() -> None:
     # Normal way
-    camera = CameraProcessing()
+    camera = CameraProcessing(show=True)
     try:
         for frame in camera.stream:
             key, detect_result = camera.process_video_detect(frame)
