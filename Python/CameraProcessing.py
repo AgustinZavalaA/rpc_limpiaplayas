@@ -19,7 +19,9 @@ class CameraProcessing:
         camera.resolution = resolution
         camera.framerate = framerate
         self.raw_capture = PiRGBArray(camera, size=resolution)
-        self.stream = camera.capture_continuous(self.raw_capture, format=video_format, use_video_port=True)
+        self.stream = camera.capture_continuous(
+            self.raw_capture, format=video_format, use_video_port=True
+        )
         self.show_camera = show
         # allow the camera to warmup
         time.sleep(0.1)
@@ -82,30 +84,30 @@ def process_video_detect_mp_handler_function(parent_conn: Pipe):
 
 def main() -> None:
     # Normal way
-    # camera = CameraProcessing(show=False)
-    # try:
-    #     for frame in camera.stream:
-    #         key, detect_result = camera.process_video_detect(frame)
-    #         print(detect_result)
-    #         if key == ord("q"):
-    #             break
-    # except KeyboardInterrupt:
-    #     print("bye bye")
+    camera = CameraProcessing()
+    try:
+        for frame in camera.stream:
+            key, detect_result = camera.process_video_detect(frame)
+            print(detect_result)
+            if key == ord("q"):
+                break
+    except KeyboardInterrupt:
+        print("bye bye")
 
     # With multiprocessing
     # camera = CameraProcessing(show=False)
-    parent_conn, child_conn = Pipe()
-    process1 = Process(target=process_video_detect_mp_function, args=(child_conn,))
-    process2 = Process(target=process_video_detect_mp_handler_function, args=(parent_conn,))
-    process1.start()
-    process2.start()
-    try:
-        process1.join()
-        process2.join()
-    except KeyboardInterrupt:
-        print("bye bye")
-        process1.terminate()
-        process2.terminate()
+    # parent_conn, child_conn = Pipe()
+    # process1 = Process(target=process_video_detect_mp_function, args=(child_conn,))
+    # process2 = Process(target=process_video_detect_mp_handler_function, args=(parent_conn,))
+    # process1.start()
+    # process2.start()
+    # try:
+    #     process1.join()
+    #     process2.join()
+    # except KeyboardInterrupt:
+    #     print("bye bye")
+    #     process1.terminate()
+    #     process2.terminate()
 
 
 if __name__ == "__main__":
