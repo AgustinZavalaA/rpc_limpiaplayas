@@ -47,6 +47,8 @@ def main() -> None:
     MAX_LINEAR_SPEED = 90
     MAX_CURVE_SPEED = 40
     STOP_DISTANCE = 20
+    MS_TO_TAKE_FRAME = 100
+    count_ms_take_frame = 0
     # last_speed_left, last_speed_right = 0, 0
     last_speed = 0
     pygame.init()
@@ -62,6 +64,13 @@ def main() -> None:
     speed = 0
 
     while not done:
+        # update the frame and take a photo when the time is right
+        s.update_camera()
+        count_ms_take_frame += 1
+        if count_ms_take_frame == MS_TO_TAKE_FRAME:
+            s.save_frame()
+            count_ms_take_frame = 0
+
         # Probably unnecessary evenet to get the state of the buttons
         for event in pygame.event.get():
             if event.type == pygame.JOYBUTTONDOWN:
@@ -134,6 +143,7 @@ def main() -> None:
             s.stop_motors()
             s.disable_motors()
             s.close_arduino()
+            s.close_camera()
             done = True
             joystick.quit()
 

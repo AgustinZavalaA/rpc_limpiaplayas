@@ -8,11 +8,13 @@ from CameraProcessing import (
     process_video_detect_mp_function,
     process_video_detect_mp_handler_function,
 )
+from DatasetCreator import DatasetCreator
 
 
 class ServerObjects:
     motors = Motors()
     arduino = ArduinoComm()
+    camera = DatasetCreator(0)
     time.sleep(2)
     print("Arduino y motores listos")
 
@@ -30,6 +32,15 @@ class ServerObjects:
 
     def close_arduino(self) -> None:
         self.arduino.close()
+
+    def close_camera(self) -> None:
+        self.camera.release()
+
+    def update_camera(self) -> None:
+        self.camera.update()
+
+    def save_frame(self) -> None:
+        self.camera.save_frame()
 
 
 def server_function():
